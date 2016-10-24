@@ -3,7 +3,7 @@ var validator = {
 	config: {},
 	errors: 0,
 	validate: function( data) {
-		var i, type, checker, result, msg;
+		var i, type, checker, ok, msg;
 
 		for (i in data) {
 			if (data.hasOwnProperty(i)) {
@@ -17,9 +17,9 @@ var validator = {
 					}
 				}
 
-				result = checker.validate(data[i]);
+				ok = checker.validate(data[i]);
 
-				if (!result) {
+				if (!ok) {
 					this.errors += 1;
 					msg = 'Niepoprawna wartość ' + i + ' ' + checker.message;
 					this.createError(msg);
@@ -27,8 +27,8 @@ var validator = {
 			}
 		}
 
-		if (!this.hasErrors) {
-			saveForm();
+		if (!this.hasErrors()) {
+			saveDataFromForm();
 		}
 	},
 	hasErrors: function() {
@@ -45,16 +45,22 @@ var validator = {
 }
 
 //Typy sprawdzeń
+validator.types.isNonEmpty = {
+	validate: function (value) {
+		return value !== '';
+	},
+	message: 'wartość nie może być pusta'
+}
 validator.types.noNumbers = {
 	validate: function(value) {
-		return value !== '' && /[^a-zA-Z]+$/.test(value);
+		return value !== '' && !/[^a-zA-Z]+$/.test(value);
 	},
-	message: 'wartość nie moze być pusta lub liczba'
+	message: 'wartość nie moze być pusta lub być liczbą'
 };
 
 validator.types.isNumber = {
 	validate: function(value) {
-		return value !== '' && /[^0-9]/i.test(value);
+		return value !== '' && !/[^0-9]/i.test(value);
 	},
 	message: 'wartość nie moze byc pusta oraz musi byc liczba'
 };
@@ -66,13 +72,21 @@ validator.types.isAlphaNumAndSpec = {
 	message: 'wartość nie może być pusta i musi zawierać co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
 };
 
+validator.types.isEmail = {
+	validate: function(value) {
+		// regex from http://emailregex.com/
+		return value !== '' && /.+@.+/i.test(value);
+	},
+	message: 'wartość nie może być pusta i musi mieć poprawny format email'
+};
+
 //Aktualna konfiguracja walidacji
 validator.config = {
 	first_name: 'noNumbers',
 	last_name: 'noNumbers',
-	textarea_1: 'isAlphaNumAndSpec',
-	textarea_2: 'isAlphaNumAndSpec',
-	email: 'isAlphaNumAndSpec',
+	textarea_1: 'isNonEmpty',
+	textarea_2: 'isNonEmpty',
+	email: 'isEmail',
 	password: 'isAlphaNumAndSpec',
 	vid_number: 'isNumber',
 	tickets_count: 'isNumber'
@@ -93,10 +107,41 @@ function saveData(input) {
     dataFromForm[input.name] = input.value;
 }
 
-function saveForm() {  
-    for (const input of inputs) {
-        localStorage.setItem(input.name, input.value);
+function saveDataFromForm() {
+	localStorage.data = JSON.stringify(dataFromForm);
+    var data = JSON.parse(localStorage.data),
+        prop;
+    for (prop in data) {
+        if (data.hasOwnProperty(prop)) {
+            localStorage.setItem(prop, data[prop]);
+        }
     }
+}
+
+function likePlaceholder() {
+	var form = get('form'),
+		stored = Array.prototype.slice.call(form);
+
+	stored.forEach(function (item, index) {
+		if (item.type !== 'button') {
+			if (item.value === '') {
+				item.value  = item.name;
+				item.classList.add('show');
+			}
+
+			item.addEventListener('focus', function() {
+				item.value  = '';
+				item.classList.remove('show');
+			});
+
+			item.addEventListener('blur', function() {
+				if (item.value === '') {
+					item.value  = item.name;
+					item.classList.add('show');
+				}
+			});
+		}
+	});
 }
 
 function get(id) {
@@ -114,28 +159,6 @@ send.addEventListener('click', function (e) {
 	validator.validate(dataFromForm);
 }, false);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.addEventListener('DOMContentLoaded', function (e) {
+  	likePlaceholder();
+}, false);

@@ -1,8 +1,8 @@
-body { 
+body {
     background-color: #ffffff;
     font-size: 1.125em;  /* 18px / 16px */
     font-family: 'Vollkorn', serif;
-    text-align: center; 
+    text-align: center;
 }
 
 .centered {
@@ -17,21 +17,30 @@ body {
     position: fixed;
     bottom: 1%;
     right: 1%;
-    width: 250px;
 }
 
 .errors div {
     width: 220px;
-    border: 1px solid #000000;
+    margin-top: 4px;
+    padding: 2px 4px;
+    border: 1px solid #181818;
+    border-radius: 5px;
+    color: red;
+    font-size: 0.55em;
+
 }
-   
-input, textarea { 
+
+input, textarea {
     padding: 10px 15px;
     margin: 10px;
     color: #000000;
     background-color: #ffffff;
-    font-size: 0.875em;  /* 14px / 16px */ 
+    font-size: 0.875em;  /* 14px / 16px */
     font-family: 'Vollkorn', serif;
     border: none;
     border-bottom: 1px solid #000000;
+}
+
+.show {
+    color: #d3d5d0;
 }
