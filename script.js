@@ -152,7 +152,10 @@ const send = get('send');
 const form = get('form');
 
 form.addEventListener('input', function (e) {
-  	saveData(e.target);
+  	saveData(e.target); 
+  	if (e.target.dataset.max) {
+  		//zaczyna liczyc ilosc znakow i gdy przekroczy max wtedy pojawia sie dymek
+  	}
 }, false);
 
 send.addEventListener('click', function (e) {
