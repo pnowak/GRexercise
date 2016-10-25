@@ -45,51 +45,66 @@ var validator = {
 }
 
 //Typy sprawdzeń
-validator.types.isNonEmpty = {
+validator.types.max10 = {
 	validate: function (value) {
-		return value !== '';
+		return /^.{1,10}$/.test(value);
 	},
-	message: 'wartość nie może być pusta'
+	message: 'wartość nie może być pusta i większa niż 10'
 }
+
+validator.types.max20 = {
+	validate: function (value) {
+		return /^.{1,20}$/.test(value);
+	},
+	message: 'wartość nie może być większa niż 20'
+}
+
 validator.types.noNumbers = {
 	validate: function(value) {
 		return value !== '' && !/[^a-zA-Z]+$/.test(value);
 	},
-	message: 'wartość nie moze być pusta lub być liczbą'
+	message: 'wartość nie moze być liczbą'
 };
 
-validator.types.isNumber = {
+validator.types.isMax5Number = {
 	validate: function(value) {
-		return value !== '' && !/[^0-9]/i.test(value);
+		return !/[^0-9]{1,5}$/i.test(value); 
 	},
-	message: 'wartość nie moze byc pusta oraz musi byc liczba'
-};
-
-validator.types.isAlphaNumAndSpec = {
-	validate: function(value) {
-		return value !== '' && !/[^a-z0-9]/i.test(value);
-	},
-	message: 'wartość nie może być pusta i musi zawierać co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
+	message: 'wartość musi byc liczba max 5 cyfrową'
 };
 
 validator.types.isEmail = {
 	validate: function(value) {
 		// regex from http://emailregex.com/
-		return value !== '' && /.+@.+/i.test(value);
+		return value !== '' && /((.*?)@(.*?).(org|com|pl))/i.test(value);
 	},
-	message: 'wartość nie może być pusta i musi mieć poprawny format email'
+	message: 'wartość musi mieć poprawny format email'
+};
+
+validator.types.isPassword = {
+	validate: function(value) {
+		return value !== '' && /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})/i.test(value);
+	},
+	message: 'wartość musi zawierać co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
+};
+
+validator.types.isRange = {
+	validate: function(value) {
+		return value !== '' && /0[1-9]|1[0-9]|2[0]/i.test(value);
+	},
+	message: 'wartość musi zawierać liczby z zakresu 1-20'
 };
 
 //Aktualna konfiguracja walidacji
 validator.config = {
 	first_name: 'noNumbers',
 	last_name: 'noNumbers',
-	textarea_1: 'isNonEmpty',
-	textarea_2: 'isNonEmpty',
+	textarea_1: 'max10',
+	textarea_2: 'max20',
 	email: 'isEmail',
-	password: 'isAlphaNumAndSpec',
-	vid_number: 'isNumber',
-	tickets_count: 'isNumber'
+	password: 'isPassword',
+	vid_number: 'isMax5Number',
+	tickets_count: 'isRange'
 }
 
 var dataFromForm = {

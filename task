@@ -16,13 +16,13 @@ Pole [Textarea 1] --> nie może być puste, maksymalnie 10 dowolnych znaków;
 Pole [Textarea 2] --> nie może być puste, maksymalnie 20 dowolnych znaków;
 Pole [Email] --> nie może być puste, adres e-mail musi mieć prawidłowy format;
 Pole [Password] --> nie może być puste, hasło musi mieć minimum 8 znaków, jedną liczbę, jedną literę i jeden znak specjalny.
-Pole [VID Number] --> nie może być puste, może przyjąc tylko cyfry z zakresu 0-9, maksymlanie 5 znaków;
+Pole [VID Number] --> nie może być puste, może przyjąc tylko cyfry z zakresu 0-9, maksymalnie 5 znaków;
 Pole [Number of tickets] --> nie może być puste, nie przyjmuje wartości większych niż 20 i mniejszych niż 1.
  
 Informacje o błędach formularza zaprezentuj nam w formie "wyskakujących" komunikatów jak na filmie z załącznika.
 Jeśli w trakcie wprowadzania danych użytkownik przekroczy maksymalną ilość znaków w Textarea 1, Textarea 2 lub VID Number wyświetl w "dymku" komunikat o przekroczeniu limitu wraz z jego wartością.
  
-Jeśli formularz zostanie wypełniony prawidłowo po kliknięciu buttona REGISTER wyświetl w "dymku" komunikat "Wysłano” i umieść w localStorage wartości z poszczególnych pól formularza.
+Jeśli formularz zostanie wypełniony prawidłowo po kliknięciu buttona REGISTER wyświetl w "dymku" komunikat "Wysłano" i umieść w localStorage wartości z poszczególnych pól formularza.
  
 Wymagania dotyczące zadania:
  
