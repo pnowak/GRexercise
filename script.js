@@ -2,7 +2,7 @@ var validator = {
 	types: {},
 	config: {},
 	errors: 0,
-	validate: function( data) {
+	validate: function(data) {
 		var i, type, checker, ok, msg;
 
 		for (i in data) {
@@ -21,7 +21,7 @@ var validator = {
 
 				if (!ok) {
 					this.errors += 1;
-					msg = 'Niepoprawna wartość ' + i + ' ' + checker.message;
+					msg = i + ' ' + checker.message;
 					this.createError(msg);
 				}
 			}
@@ -39,8 +39,8 @@ var validator = {
         	div = document.createElement('div'),
         	content = document.createTextNode(value);
 
-        div.appendChild(content);
-        error.insertBefore(div, error.firstChild);
+		div.appendChild(content);
+		error.insertBefore(div, error.firstChild);
     }
 }
 
@@ -49,28 +49,28 @@ validator.types.max10 = {
 	validate: function (value) {
 		return /^.{1,10}$/.test(value);
 	},
-	message: 'wartość nie może być pusta i większa niż 10'
+	message: 'wartość nie może być dłuższa niż 10 dowolnych znaków'
 }
 
 validator.types.max20 = {
 	validate: function (value) {
 		return /^.{1,20}$/.test(value);
 	},
-	message: 'wartość nie może być większa niż 20'
+	message: 'wartość nie może być dłuższa niż 20 dowolnych znaków'
 }
 
 validator.types.noNumbers = {
 	validate: function(value) {
 		return value !== '' && !/[^a-zA-Z]+$/.test(value);
 	},
-	message: 'wartość nie moze być liczbą'
+	message: 'wartość nie może być pusta i być liczbą'
 };
 
 validator.types.isMax5Number = {
 	validate: function(value) {
-		return !/[^0-9]{1,5}$/i.test(value); 
+		return value !== '' && !/[^0-9]{1,5}$/i.test(value); 
 	},
-	message: 'wartość musi byc liczba max 5 cyfrową'
+	message: 'wartość musi być liczbą max 5 cyfrową'
 };
 
 validator.types.isEmail = {
@@ -85,12 +85,12 @@ validator.types.isPassword = {
 	validate: function(value) {
 		return value !== '' && /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})/i.test(value);
 	},
-	message: 'wartość musi zawierać co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
+	message: 'wartość musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
 };
 
 validator.types.isRange = {
 	validate: function(value) {
-		return value !== '' && /0[1-9]|1[0-9]|2[0]/i.test(value);
+		return value !== '' && /^([1-9]|1[0-9]|2[0])$/i.test(value);
 	},
 	message: 'wartość musi zawierać liczby z zakresu 1-20'
 };
@@ -169,7 +169,7 @@ const form = get('form');
 form.addEventListener('input', function (e) {
   	saveData(e.target); 
   	if (e.target.dataset.max) {
-  		//zaczyna liczyc ilosc znakow i gdy przekroczy max wtedy pojawia sie dymek
+  		//
   	}
 }, false);
 
