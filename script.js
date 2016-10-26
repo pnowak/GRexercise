@@ -35,9 +35,9 @@ var validator = {
 		return this.errors !== 0;
 	},
 	createError(value) {
-        var error = get('error'),
-        	div = document.createElement('div'),
-        	content = document.createTextNode(value);
+		var error = get('error'),
+			div = document.createElement('div'),
+			content = document.createTextNode(value);
 
 		div.appendChild(content);
 		error.insertBefore(div, error.firstChild);
@@ -83,7 +83,7 @@ validator.types.isEmail = {
 
 validator.types.isPassword = {
 	validate: function(value) {
-		return value !== '' && /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})/i.test(value);
+		return ((value !== '') && (value.length >= 8) && (value.match(/([a-zA-Z])/) && value.match(/([0-9])/) && value.match(/.[!,@,#,$,%,^,&,*,?,_,~]/)));
 	},
 	message: 'wartość musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
 };
@@ -167,9 +167,16 @@ const send = get('send');
 const form = get('form');
 
 form.addEventListener('input', function (e) {
-  	saveData(e.target); 
-  	if (e.target.dataset.max) {
-  		//
+	var target = e.target;
+
+  	saveData(target);
+  	
+  	if (target.value.length > target.dataset.max) {
+  		target.nextSibling.classList.add('max');
+  		target.nextSibling.textContent = 'miało być ' + target.dataset.max + ' a jest ' + target.value.length;
+  	} else {
+  		target.nextSibling.classList.remove('max');
+  		target.nextSibling.textContent = '';
   	}
 }, false);
 
