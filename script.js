@@ -1,6 +1,7 @@
 var validator = {
 	types: {},
 	config: {},
+	dataFromForm: {},
 	errors: 0,
 	validate: function(data) {
 		var i, type, checker, ok, msg;
@@ -28,7 +29,12 @@ var validator = {
 		}
 
 		if (!this.hasErrors()) {
+			var balloon = get('balloon');
+
 			saveDataFromForm();
+
+			balloon.classList.add('balloon');
+  			balloon.textContent = 'Wysłano! Dziękujemy.';
 		}
 	},
 	hasErrors: function() {
@@ -37,11 +43,12 @@ var validator = {
 	createError(value) {
 		var error = get('error'),
 			div = document.createElement('div'),
-			content = document.createTextNode(value);
+			content = document.createTextNode(value); console.log(this);
 
 		div.appendChild(content);
 		error.insertBefore(div, error.firstChild);
     }
+
 }
 
 //Typy sprawdzeń
@@ -68,7 +75,7 @@ validator.types.noNumbers = {
 
 validator.types.isMax5Number = {
 	validate: function(value) {
-		return value !== '' && !/[^0-9]{1,5}$/i.test(value); 
+		return (value !== '' && (value.length <= 5) && (value.match(/([0-9])/)));
 	},
 	message: 'wartość musi być liczbą max 5 cyfrową'
 };
@@ -107,7 +114,8 @@ validator.config = {
 	tickets_count: 'isRange'
 }
 
-var dataFromForm = {
+//Aktualna konfiguracja pol formularza
+validator.dataFromForm = {
 	first_name: '',
 	last_name: '',
 	textarea_1: '',
@@ -119,11 +127,11 @@ var dataFromForm = {
 };
 
 function saveData(input) {
-    dataFromForm[input.name] = input.value;
+    validator.dataFromForm[input.name] = input.value;
 }
 
 function saveDataFromForm() {
-	localStorage.data = JSON.stringify(dataFromForm);
+	localStorage.data = JSON.stringify(validator.dataFromForm);
     var data = JSON.parse(localStorage.data),
         prop;
     for (prop in data) {
@@ -147,6 +155,7 @@ function likePlaceholder() {
 			item.addEventListener('focus', function() {
 				item.value  = '';
 				item.classList.remove('show');
+				removeBalloon();
 			});
 
 			item.addEventListener('blur', function() {
@@ -159,6 +168,20 @@ function likePlaceholder() {
 	});
 }
 
+function addBalloon(target) {
+	var balloon = get('balloon');
+
+	balloon.classList.add('balloon');
+  	balloon.textContent = 'Miało być ' + target.dataset.max + ' a jest ' + target.value.length;
+}
+
+function removeBalloon() {
+	var balloon = get('balloon');
+
+	balloon.classList.remove('balloon');
+  	balloon.textContent = '';
+}
+
 function get(id) {
     return document.getElementById(id);
 }
@@ -167,21 +190,20 @@ const send = get('send');
 const form = get('form');
 
 form.addEventListener('input', function (e) {
-	var target = e.target;
+	var target = e.target,
+		balloon = get('balloon');
 
   	saveData(target);
-  	
+
   	if (target.value.length > target.dataset.max) {
-  		target.nextSibling.classList.add('max');
-  		target.nextSibling.textContent = 'miało być ' + target.dataset.max + ' a jest ' + target.value.length;
+  		addBalloon(target);
   	} else {
-  		target.nextSibling.classList.remove('max');
-  		target.nextSibling.textContent = '';
+  		removeBalloon();
   	}
 }, false);
 
 send.addEventListener('click', function (e) {
-	validator.validate(dataFromForm);
+	validator.validate(validator.dataFromForm);
 }, false);
 
 document.addEventListener('DOMContentLoaded', function (e) {
