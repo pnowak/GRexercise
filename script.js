@@ -4,7 +4,8 @@ var validator = {
 	dataFromForm: {},
 	errors: 0,
 	validate: function(data) {
-		var i, type, checker, ok, msg;
+		var balloon = get('balloon'),
+			i, type, checker, ok, msg;
 
 		for (i in data) {
 			if (data.hasOwnProperty(i)) {
@@ -29,12 +30,14 @@ var validator = {
 		}
 
 		if (!this.hasErrors()) {
-			var balloon = get('balloon');
-
 			saveDataFromForm();
 
 			balloon.classList.add('balloon');
   			balloon.textContent = 'Wysłano! Dziękujemy.';
+		}
+
+		if (!!this.hasErrors()) {
+			moveErrors(1000, 900);
 		}
 	},
 	hasErrors: function() {
@@ -162,7 +165,7 @@ function likePlaceholder() {
 				if (item.value === '') {
 					item.value  = item.name;
 					item.classList.add('show');
-				}
+				} 
 			});
 		}
 	});
@@ -180,6 +183,35 @@ function removeBalloon() {
 
 	balloon.classList.remove('balloon');
   	balloon.textContent = '';
+}
+
+function moveErrors(duration, to) {
+	var error = document.querySelector('.errors'),
+		divs = document.querySelectorAll('.errors div'),
+		frameRate = 1000 / 60,
+		perFrame = to / (duration / frameRate),
+		lastTime;
+
+	function update(now) {
+		divs.forEach(function (item, index) {         
+			var heigth = item.clientHeight
+				diff = 1; console.log(heigth);
+
+			if (lastTime) {
+				diff = (now - lastTime) / frameRate;
+			}
+
+			lastTime = now;
+
+			error.style.top = heigth + perFrame + 'px';
+
+			if (parseInt( error.style.top, 10) < to) {
+				requestAnimationFrame(update);
+			}
+		});
+	}
+
+	requestAnimationFrame(update);
 }
 
 function get(id) {

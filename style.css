@@ -17,8 +17,6 @@ body {
     position: fixed;
     bottom: 1%;
     right: 1%;
-    will-change: transform;
-    animation: move 1s ease-in-out infinite alternate forwards paused;
 }
 
 .errors div {
@@ -29,7 +27,6 @@ body {
     border-radius: 5px;
     color: red;
     font-size: 0.55em;
-    animation-play-state: running;
 }
 
 input, textarea {
@@ -80,14 +77,4 @@ input[type="button"] {
 
 .show {
     color: #d3d5d0;
-}
-
-@keyframes move {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(300px);
-    }
 }
