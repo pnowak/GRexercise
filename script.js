@@ -153,19 +153,32 @@ function likePlaceholder() {
 			if (item.value === '') {
 				item.value  = item.name;
 				item.classList.add('show');
+
+				if (item.type === 'password') {
+					item.type = 'text';
+				}
 			}
 
 			item.addEventListener('focus', function() {
-				item.value  = '';
-				item.classList.remove('show');
-				removeBalloon();
+				if (item.value  === item.name) {
+					item.value  = '';
+					item.classList.remove('show');
+
+					if (item.name === 'password') {
+						item.type  = 'password';
+					}
+				}
 			});
 
 			item.addEventListener('blur', function() {
 				if (item.value === '') {
 					item.value  = item.name;
-					item.classList.add('show');
-				} 
+					item.classList.toggle('show');
+
+					if (item.type === 'password') {
+						item.type = 'text';
+					}
+				}
 			});
 		}
 	});
