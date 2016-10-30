@@ -25,6 +25,7 @@ var validator = {
 					this.errors += 1;
 					msg = i + ' ' + checker.message;
 					this.createError(msg);
+					setTimeout(moveErrors, 3000);
 				}
 			}
 		}
@@ -34,10 +35,6 @@ var validator = {
 
 			balloon.classList.add('balloon');
   			balloon.textContent = 'Wysłano! Dziękujemy.';
-		}
-
-		if (!!this.hasErrors()) {
-			moveErrors();
 		}
 	},
 	hasErrors: function() {
@@ -200,11 +197,30 @@ function removeBalloon() {
 }
 
 function moveErrors() {
-	var divs = document.querySelectorAll('.errors div');
+	var error = divs = document.querySelectorAll('.errors div');
 
 	divs.forEach(function (item, index) {
 		item.classList.add('animate');
+		fadeOut(item);
 	});
+
+	function fadeOut(el) {
+		var last = +new Date(),
+			tick;
+
+  		el.style.opacity = 1;
+
+  		tick = function() {
+    		el.style.opacity = +el.style.opacity - (new Date() - last) / 40000;
+    		last = +new Date();
+
+		    if (+el.style.opacity > 0) {
+		      	requestAnimationFrame(tick);
+		    }
+  		};
+
+  		tick();
+	}
 }
 
 function get(id) {
