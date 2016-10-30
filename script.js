@@ -25,7 +25,7 @@ var validator = {
 					this.errors += 1;
 					msg = i + ' ' + checker.message;
 					this.createError(msg);
-					setTimeout(moveErrors, 3000);
+					setTimeout( moveErrors, 3000);
 				}
 			}
 		}
@@ -197,30 +197,46 @@ function removeBalloon() {
 }
 
 function moveErrors() {
-	var error = divs = document.querySelectorAll('.errors div');
+	var error = get('error'),
+		divs = document.querySelectorAll('.errors div'),
+		frameRate = 1000 / 60,
+		to = 0,
+		lastTime, perFrame;
 
 	divs.forEach(function (item, index) {
-		item.classList.add('animate');
-		fadeOut(item);
+		to += (item.clientHeight);
 	});
 
-	function fadeOut(el) {
-		var last = +new Date(),
-			tick;
+	function getValueFromTranform(transform) {
+		var value;
 
-  		el.style.opacity = 1;
+		if (!transform) {
+			return 0;
+		}
 
-  		tick = function() {
-    		el.style.opacity = +el.style.opacity - (new Date() - last) / 40000;
-    		last = +new Date();
+		value = transform.match(/translateY\((\d*\.\d+|\d+)px\)/)[1];
 
-		    if (+el.style.opacity > 0) {
-		      	requestAnimationFrame(tick);
-		    }
-  		};
-
-  		tick();
+		return parseInt(value, 10);
 	}
+
+	function update(now) {
+		var current = getValueFromTranform(error.style.transform),
+			diff = 1,
+			perFrame = to / frameRate; console.log(perFrame / divs.length);
+
+		if (lastTime) {
+			diff = (now - lastTime) / frameRate;
+		}
+
+		lastTime = now;
+		error.style.transform = 'translateY(' + (current + diff) + 'px' + ')';
+
+  		if (getValueFromTranform(error.style.transform) < to) {
+		   	requestAnimationFrame(update);
+		}
+	}
+
+	requestAnimationFrame(update);
 }
 
 function get(id) {
