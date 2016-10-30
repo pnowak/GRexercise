@@ -37,7 +37,7 @@ var validator = {
 		}
 
 		if (!!this.hasErrors()) {
-			moveErrors(1000, 900);
+			moveErrors();
 		}
 	},
 	hasErrors: function() {
@@ -46,7 +46,7 @@ var validator = {
 	createError(value) {
 		var error = get('error'),
 			div = document.createElement('div'),
-			content = document.createTextNode(value); console.log(this);
+			content = document.createTextNode(value);
 
 		div.appendChild(content);
 		error.insertBefore(div, error.firstChild);
@@ -137,6 +137,7 @@ function saveDataFromForm() {
 	localStorage.data = JSON.stringify(validator.dataFromForm);
     var data = JSON.parse(localStorage.data),
         prop;
+
     for (prop in data) {
         if (data.hasOwnProperty(prop)) {
             localStorage.setItem(prop, data[prop]);
@@ -198,33 +199,12 @@ function removeBalloon() {
   	balloon.textContent = '';
 }
 
-function moveErrors(duration, to) {
-	var error = document.querySelector('.errors'),
-		divs = document.querySelectorAll('.errors div'),
-		frameRate = 1000 / 60,
-		perFrame = to / (duration / frameRate),
-		lastTime;
+function moveErrors() {
+	var divs = document.querySelectorAll('.errors div');
 
-	function update(now) {
-		divs.forEach(function (item, index) {         
-			var heigth = item.clientHeight
-				diff = 1; console.log(heigth);
-
-			if (lastTime) {
-				diff = (now - lastTime) / frameRate;
-			}
-
-			lastTime = now;
-
-			error.style.top = heigth + perFrame + 'px';
-
-			if (parseInt( error.style.top, 10) < to) {
-				requestAnimationFrame(update);
-			}
-		});
-	}
-
-	requestAnimationFrame(update);
+	divs.forEach(function (item, index) {
+		item.classList.add('animate');
+	});
 }
 
 function get(id) {
@@ -251,6 +231,4 @@ send.addEventListener('click', function (e) {
 	validator.validate(validator.dataFromForm);
 }, false);
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  	likePlaceholder();
-}, false);
+document.addEventListener('DOMContentLoaded', likePlaceholder, false);
