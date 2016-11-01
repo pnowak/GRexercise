@@ -77,3 +77,12 @@ input[type="button"] {
     color: red;
     font-size: 0.55em;
 }
+
+.animate {
+    animation: move 33s linear 3s;
+}
+
+@keyframes move {
+  from { transform: translateY(0); }
+  to { transform: translateY(555px); }
+}

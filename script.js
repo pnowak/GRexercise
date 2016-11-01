@@ -25,7 +25,7 @@ var validator = {
 					this.errors += 1;
 					msg = i + ' ' + checker.message;
 					this.createError(msg);
-					setTimeout( moveErrors, 3000);
+					moveErrors();
 				}
 			}
 		}
@@ -46,7 +46,7 @@ var validator = {
 			content = document.createTextNode(value);
 
 		div.appendChild(content);
-		error.insertBefore(div, error.firstChild);
+		error.appendChild(div, error.firstChild);
     }
 
 }
@@ -199,44 +199,37 @@ function removeBalloon() {
 function moveErrors() {
 	var error = get('error'),
 		divs = document.querySelectorAll('.errors div'),
-		frameRate = 1000 / 60,
-		to = 0,
-		lastTime, perFrame;
+		i = divs.length;
 
-	divs.forEach(function (item, index) {
-		to += (item.clientHeight);
-	});
+	while (i--) {
+		var item = divs[i],
+			time = ((10000 * divs.length) / i); console.log(time);
 
-	function getValueFromTranform(transform) {
-		var value;
-
-		if (!transform) {
-			return 0;
-		}
-
-		value = transform.match(/translateY\((\d*\.\d+|\d+)px\)/)[1];
-
-		return parseInt(value, 10);
+		item.classList.add('animate');
+		fadeOut(item, time);
 	}
 
-	function update(now) {
-		var current = getValueFromTranform(error.style.transform),
-			diff = 1,
-			perFrame = to / frameRate; console.log(perFrame / divs.length);
+	function fadeOut(el, time) {
+		var ease = Math.sqrt,
+			start = (new Date()).getTime();
 
-		if (lastTime) {
-			diff = (now - lastTime) / frameRate;
-		}
+		update();
 
-		lastTime = now;
-		error.style.transform = 'translateY(' + (current + diff) + 'px' + ')';
+		function update() {
+			var elapsed = (new Date()).getTime() - start,
+				fraction = elapsed / time,
+				opacity;
 
-  		if (getValueFromTranform(error.style.transform) < to) {
-		   	requestAnimationFrame(update);
+			if ( fraction < 1) {
+				opacity = 1 - ease(fraction);
+				el.style.opacity = opacity;
+
+				setTimeout(update, Math.min(25, time - elapsed));
+			} else {
+				el.style.opacity = 0;
+			}
 		}
 	}
-
-	requestAnimationFrame(update);
 }
 
 function get(id) {
