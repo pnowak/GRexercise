@@ -56,28 +56,28 @@ validator.types.max10 = {
 	validate: function (value) {
 		return /^.{1,10}$/.test(value);
 	},
-	message: 'wartość nie może być dłuższa niż 10 dowolnych znaków'
+	message: 'nie może być dłuższa niż 10 dowolnych znaków'
 }
 
 validator.types.max20 = {
 	validate: function (value) {
 		return /^.{1,20}$/.test(value);
 	},
-	message: 'wartość nie może być dłuższa niż 20 dowolnych znaków'
+	message: 'nie może być dłuższa niż 20 dowolnych znaków'
 }
 
 validator.types.noNumbers = {
 	validate: function(value) {
 		return value !== '' && !/[^a-zA-Z]+$/.test(value);
 	},
-	message: 'wartość nie może być pusta i być liczbą'
+	message: 'nie może być pusta i być liczbą'
 };
 
-validator.types.isMax5Number = {
+validator.types.isMax5Digits = {
 	validate: function(value) {
-		return (value !== '' && (value.length <= 5) && (value.match(/([0-9])/)));
+		return ((value !== '') && (value.length <= 5) && (!isNaN(value)));
 	},
-	message: 'wartość musi być liczbą max 5 cyfrową'
+	message: 'musi być liczbą max 5 cyfrową'
 };
 
 validator.types.isEmail = {
@@ -85,21 +85,21 @@ validator.types.isEmail = {
 		// regex from http://emailregex.com/
 		return value !== '' && /((.*?)@(.*?).(org|com|pl))/i.test(value);
 	},
-	message: 'wartość musi mieć poprawny format email'
+	message: 'musi mieć poprawny format email'
 };
 
 validator.types.isPassword = {
 	validate: function(value) {
 		return ((value !== '') && (value.length >= 8) && (value.match(/([a-zA-Z])/) && value.match(/([0-9])/) && value.match(/.[!,@,#,$,%,^,&,*,?,_,~]/)));
 	},
-	message: 'wartość musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
+	message: 'musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
 };
 
 validator.types.isRange = {
 	validate: function(value) {
 		return value !== '' && /^([1-9]|1[0-9]|2[0])$/i.test(value);
 	},
-	message: 'wartość musi zawierać liczby z zakresu 1-20'
+	message: 'musi zawierać liczby z zakresu 1-20'
 };
 
 //Aktualna konfiguracja walidacji
@@ -110,11 +110,11 @@ validator.config = {
 	textarea_2: 'max20',
 	email: 'isEmail',
 	password: 'isPassword',
-	vid_number: 'isMax5Number',
+	vid_number: 'isMax5Digits',
 	tickets_count: 'isRange'
 }
 
-//Aktualna konfiguracja pol formularza
+//Aktualna konfiguracja pól formularza
 validator.dataFromForm = {
 	first_name: '',
 	last_name: '',
@@ -203,15 +203,14 @@ function moveErrors() {
 
 	while (i--) {
 		var item = divs[i],
-			time = ((10000 * divs.length) / i); console.log(time);
+			time = ((10000 * divs.length) / (i + 1)).toFixed(2);
 
 		item.classList.add('animate');
 		fadeOut(item, time);
 	}
 
 	function fadeOut(el, time) {
-		var ease = Math.sqrt,
-			start = (new Date()).getTime();
+		var start = (new Date()).getTime();
 
 		update();
 
@@ -221,8 +220,8 @@ function moveErrors() {
 				opacity;
 
 			if ( fraction < 1) {
-				opacity = 1 - ease(fraction);
-				el.style.opacity = opacity;
+				opacity = 1 - Math.sqrt(fraction);
+				el.style.opacity = opacity.toFixed(2);
 
 				setTimeout(update, Math.min(25, time - elapsed));
 			} else {
@@ -236,8 +235,8 @@ function get(id) {
     return document.getElementById(id);
 }
 
-const send = get('send');
-const form = get('form');
+var send = get('send');
+var form = get('form');
 
 form.addEventListener('input', function (e) {
 	var target = e.target,

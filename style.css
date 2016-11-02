@@ -79,7 +79,7 @@ input[type="button"] {
 }
 
 .animate {
-    animation: move 33s linear 3s;
+    animation: move 60s linear 3s;
 }
 
 @keyframes move {
