@@ -40,7 +40,7 @@ var validator = {
 	hasErrors: function() {
 		return this.errors !== 0;
 	},
-	createError(value) {
+	createError: function(value) {
 		var error = get('error'),
 			div = document.createElement('div'),
 			content = document.createTextNode(value);
