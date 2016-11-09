@@ -1,7 +1,7 @@
 body {
     background-color: #ffffff;
     font-size: 1.125em;  /* 18px / 16px */
-    font-family: 'Vollkorn', serif;
+    font-family: 'Special Elite', cursive;
     text-align: center;
 }
 
@@ -11,18 +11,17 @@ input, textarea {
     color: #000000;
     background-color: #ffffff;
     font-size: 0.875em;  /* 14px / 16px */
-    font-family: 'Vollkorn', serif;
+    font-family: 'Special Elite', cursive;
     border: none;
     border-bottom: 1px solid #000000;
 }
 
 input[type="button"] {
-    padding: 5px 15px;
-    margin: 10px;
+    padding: 10px 15px;
+    margin: 30px;
     color: #ffffff;
     background-color: #000000;
     font-size: 0.875em;  /* 14px / 16px */
-    font-family: 'Vollkorn', serif;
     border: none;
 }
 
@@ -31,7 +30,7 @@ input[type="button"] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
+    width: 600px;
 }
 
 .balloon {
@@ -44,7 +43,6 @@ input[type="button"] {
     bottom: 101%;
     left: 44%;
     margin-left: -60px;
-    width: 180px;
 }
 
 .balloon:after {

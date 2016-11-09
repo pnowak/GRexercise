@@ -157,7 +157,7 @@ function likePlaceholder() {
 				}
 			}
 
-			item.addEventListener('focus', function() {
+			item.addEventListener('keypress', function() {
 				if (item.value  === item.name) {
 					item.value  = '';
 					item.classList.remove('show');
