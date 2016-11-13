@@ -1,17 +1,23 @@
 module.exports = {
-    entry: "./app.js",
+    entry: __dirname + '/src/app.js',
     output: {
-        path: __dirname,
-        filename: "bundle.js"
+        path: __dirname + '/dist', 
+        filename: '/bundle.js',
     },
     module: {
-        rules: [
-        {
-            test: /\.js$/,
-            use: [{
-                loader: "babel-loader",
-                options: { presets: ["es2015"] }
-            }],
-        },
+        loaders: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ]
+    },
+    stats: {
+        // Nice colored output
+        colors: true
     }
 };

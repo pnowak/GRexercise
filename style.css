@@ -23,6 +23,7 @@ input[type="button"] {
     background-color: #000000;
     font-size: 0.875em;  /* 14px / 16px */
     border: none;
+    cursor: pointer;
 }
 
 .centered {
@@ -81,6 +82,6 @@ input[type="button"] {
 }
 
 @keyframes move {
-  from { transform: translateY(0); }
-  to { transform: translateY(555px); }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(555px); opacity: 0; }
 }

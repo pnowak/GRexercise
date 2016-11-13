@@ -1,7 +1,14 @@
+'use strict';
+
+import get from './helpers/get';
+import likePlaceholder from './placeholder/likePlaceholder';
+import { createError, moveErrors } from './errors/error';
+import { addBalloon, removeBalloon } from './balloon/balloon';
+import { saveData, saveDataFromForm } from './localeStorage/data';
+
 var validator = {
 	types: {},
 	config: {},
-	dataFromForm: {},
 	errors: 0,
 	validate: function(data) {
 		var balloon = get('balloon'),
@@ -24,14 +31,14 @@ var validator = {
 				if (!ok) {
 					this.errors += 1;
 					msg = i + ' ' + checker.message;
-					this.createError(msg);
+					createError(msg);
 					moveErrors();
 				}
 			}
 		}
 
 		if (!this.hasErrors()) {
-			saveDataFromForm();
+			saveDataFromForm(dataFromForm);
 
 			balloon.classList.add('balloon');
   			balloon.textContent = 'Wysłano! Dziękujemy.';
@@ -39,16 +46,7 @@ var validator = {
 	},
 	hasErrors: function() {
 		return this.errors !== 0;
-	},
-	createError: function(value) {
-		var error = get('error'),
-			div = document.createElement('div'),
-			content = document.createTextNode(value);
-
-		div.appendChild(content);
-		error.appendChild(div, error.firstChild);
-    }
-
+	}
 }
 
 //Typy sprawdzeń
@@ -115,7 +113,7 @@ validator.config = {
 }
 
 //Aktualna konfiguracja pól formularza
-validator.dataFromForm = {
+const dataFromForm = {
 	first_name: '',
 	last_name: '',
 	textarea_1: '',
@@ -126,123 +124,14 @@ validator.dataFromForm = {
 	tickets_count: ''
 };
 
-function saveData(input) {
-    validator.dataFromForm[input.name] = input.value;
-}
-
-function saveDataFromForm() {
-	localStorage.data = JSON.stringify(validator.dataFromForm);
-    var data = JSON.parse(localStorage.data),
-        prop;
-
-    for (prop in data) {
-        if (data.hasOwnProperty(prop)) {
-            localStorage.setItem(prop, data[prop]);
-        }
-    }
-}
-
-function likePlaceholder() {
-	var form = get('form'),
-		stored = Array.prototype.slice.call(form);
-
-	stored.forEach(function (item, index) {
-		if (item.type !== 'button') {
-			if (item.value === '') {
-				item.value  = item.name;
-				item.classList.add('show');
-
-				if (item.type === 'password') {
-					item.type = 'text';
-				}
-			}
-
-			item.addEventListener('keypress', function() {
-				if (item.value  === item.name) {
-					item.value  = '';
-					item.classList.remove('show');
-
-					if (item.name === 'password') {
-						item.type  = 'password';
-					}
-				}
-			});
-
-			item.addEventListener('blur', function() {
-				if (item.value === '') {
-					item.value  = item.name;
-					item.classList.toggle('show');
-
-					if (item.type === 'password') {
-						item.type = 'text';
-					}
-				}
-			});
-		}
-	});
-}
-
-function addBalloon(target) {
-	var balloon = get('balloon');
-
-	balloon.classList.add('balloon');
-  	balloon.textContent = 'Miało być ' + target.dataset.max + ' a jest ' + target.value.length;
-}
-
-function removeBalloon() {
-	var balloon = get('balloon');
-
-	balloon.classList.remove('balloon');
-  	balloon.textContent = '';
-}
-
-function moveErrors() {
-	var error = get('error'),
-		divs = document.querySelectorAll('.errors div'),
-		i = divs.length;
-
-	while (i--) {
-		var item = divs[i],
-			time = ((10000 * divs.length) / (i + 1)).toFixed(2);
-
-		item.classList.add('animate');
-		fadeOut(item, time);
-	}
-
-	function fadeOut(el, time) {
-		var start = (new Date()).getTime();
-
-		update();
-
-		function update() {
-			var elapsed = (new Date()).getTime() - start,
-				fraction = elapsed / time,
-				opacity;
-
-			if ( fraction < 1) {
-				opacity = 1 - Math.sqrt(fraction);
-				el.style.opacity = opacity.toFixed(2);
-
-				setTimeout(update, Math.min(25, time - elapsed));
-			} else {
-				el.style.opacity = 0;
-			}
-		}
-	}
-}
-
-function get(id) {
-    return document.getElementById(id);
-}
-
-var send = get('send');
-var form = get('form');
+const send = get('send');
+const form = get('form');
 
 form.addEventListener('input', function (e) {
-	var target = e.target,
-		balloon = get('balloon');
+	const target = e.target;
+	const balloon = get('balloon');
 
-  	saveData(target);
+  	saveData(target, dataFromForm);
 
   	if (target.value.length > target.dataset.max) {
   		addBalloon(target);
@@ -251,8 +140,8 @@ form.addEventListener('input', function (e) {
   	}
 }, false);
 
-send.addEventListener('click', function (e) {
-	validator.validate(validator.dataFromForm);
+send.addEventListener('click', function validate(e) {
+	validator.validate(dataFromForm);
 }, false);
 
 document.addEventListener('DOMContentLoaded', likePlaceholder, false);
