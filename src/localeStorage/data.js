@@ -20,10 +20,12 @@ export function saveDataFromForm(dataFromForm) {
 
 export function getDataFromLocal() {
     const data = JSON.parse(localStorage.data);
+    const form = get('form');
+    const stored = Array.from(form);
 
-    for (let prop in data) {
-        if (data.hasOwnProperty(prop)) {
-            get(prop).value = localStorage.getItem(prop);
+    for (let i = 0; i < stored.length; i += 1) {
+        if (data.hasOwnProperty(stored[i].name)) {
+            stored[i].value = localStorage.getItem(stored[i].name);
         }
     }
 }

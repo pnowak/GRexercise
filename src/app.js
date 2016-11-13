@@ -4,7 +4,7 @@ import get from './helpers/get';
 import likePlaceholder from './placeholder/likePlaceholder';
 import { createError, moveErrors } from './errors/error';
 import { addBalloon, removeBalloon } from './balloon/balloon';
-import { saveData, saveDataFromForm } from './localeStorage/data';
+import { saveData, saveDataFromForm, getDataFromLocal } from './localeStorage/data';
 
 var validator = {
 	types: {},
@@ -144,4 +144,4 @@ send.addEventListener('click', function validate(e) {
 	validator.validate(dataFromForm);
 }, false);
 
-document.addEventListener('DOMContentLoaded', likePlaceholder, false);
+document.addEventListener('DOMContentLoaded', getDataFromLocal, false);

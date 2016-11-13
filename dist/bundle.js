@@ -203,11 +203,10 @@
 	}, false);
 
 	send.addEventListener('click', function validate(e) {
-		console.log(dataFromForm);
 		validator.validate(dataFromForm);
 	}, false);
 
-	document.addEventListener('DOMContentLoaded', _likePlaceholder2.default, false);
+	document.addEventListener('DOMContentLoaded', _data.getDataFromLocal, false);
 
 /***/ },
 /* 1 */
@@ -384,10 +383,13 @@
 
 	function getDataFromLocal() {
 	    var data = JSON.parse(localStorage.data);
+	    var form = (0, _get2.default)('form');
+	    var stored = Array.from(form);
 
-	    for (var prop in data) {
-	        if (data.hasOwnProperty(prop)) {
-	            (0, _get2.default)(prop).value = localStorage.getItem(prop);
+	    for (var i = 0; i < stored.length; i += 1) {
+	        if (data.hasOwnProperty(stored[i].name)) {
+	            console.log(stored[i].name);
+	            stored[i].value = localStorage.getItem(stored[i].name);
 	        }
 	    }
 	}
