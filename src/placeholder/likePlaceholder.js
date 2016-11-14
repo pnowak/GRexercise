@@ -3,7 +3,7 @@
 import get from './../helpers/get';
 
 function likePlaceholder() {
-	const form = get('form'); console.log(form);
+	const form = get('form');
 	const stored = Array.from(form);
 
 	stored.forEach(function (item, index) {
@@ -41,3 +41,5 @@ function likePlaceholder() {
 		}
 	});
 }
+
+export default likePlaceholder;

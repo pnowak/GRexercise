@@ -12,13 +12,19 @@ export function createError(value) {
 }
 
 export function moveErrors() {
-	const error = get('error');
-	const divs = document.querySelectorAll('.errors div');
-	let i = divs.length;
+	const errorsDivs = document.querySelectorAll('.errors div');
+	const errorsArray = Array.from(errorsDivs);
 
-	while (i--) {
-		let item = divs[i];
-
+	errorsArray.forEach(function (item, index) {
 		item.classList.add('animate');
-	}
+	});
+}
+
+export function	removeErrors() {
+	const errorsDivs = document.querySelectorAll('.errors div');
+	const errorsArray = Array.from(errorsDivs);
+
+	errorsArray.forEach(function (item, index) {
+		item.classList.add('disappear');
+	});
 }

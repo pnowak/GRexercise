@@ -77,6 +77,10 @@ input[type="button"] {
     font-size: 0.55em;
 }
 
+.disappear {
+    display: none;
+}
+
 .animate {
     animation: move 60s linear 3s;
 }
