@@ -2,11 +2,23 @@
 
 import get from './../helpers/get';
 
+//Aktualna konfiguracja pól formularza
+export const dataFromForm = {
+    first_name: '',
+    last_name: '',
+    textarea_1: '',
+    textarea_2: '',
+    email: '',
+    password: '',
+    vid_number: '',
+    tickets_count: ''
+};
+
 export function saveData(input, data) {
     data[input.name] = input.value;
 }
 
-export function saveDataFromForm(dataFromForm) {
+export function saveDataFromForm() {
 	localStorage.data = JSON.stringify(dataFromForm);
 
     let data = JSON.parse(localStorage.data);

@@ -1,11 +1,11 @@
 'use strict';
 
 import get from './helpers/get';
+import validateForm from './validator/validate';
 import likePlaceholder from './placeholder/likePlaceholder';
 import { createError, moveErrors, removeErrors } from './errors/error';
 import { addBalloon, removeBalloon } from './balloon/balloon';
-import { saveData, saveDataFromForm, getDataFromLocal } from './localeStorage/data';
-import validateForm from './validator/validate';
+import * as data from './localeStorage/data';
 
 /*validator.types.isMax5Digits = {
 	validate: function(value) {
@@ -21,18 +21,6 @@ validator.types.isPassword = {
 	message: 'musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
 };*/
 
-//Aktualna konfiguracja pól formularza
-const dataFromForm = {
-	first_name: '',
-	last_name: '',
-	textarea_1: '',
-	textarea_2: '',
-	email: '',
-	password: '',
-	vid_number: '',
-	tickets_count: ''
-};
-
 const send = get('send');
 const form = get('form');
 
@@ -40,7 +28,7 @@ form.addEventListener('input', function(e) {
 	const target = e.target;
 	const balloon = get('balloon');
 
-  	saveData(target, dataFromForm);
+  	data.saveData(target, data.dataFromForm);
 
   	if (target.value.length > target.dataset.max) {
   		addBalloon(target);
@@ -54,5 +42,7 @@ send.addEventListener('click', function(e) {
 	validateForm();
 }, false);
 
-document.addEventListener('DOMContentLoaded', getDataFromLocal, false);
-document.addEventListener('load', likePlaceholder, false);
+document.addEventListener('DOMContentLoaded', function(e) {
+	likePlaceholder();
+	data.getDataFromLocal();
+}, false);

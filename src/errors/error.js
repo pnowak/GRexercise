@@ -8,7 +8,7 @@ export function createError(value) {
 	const content = document.createTextNode(value);
 
 	div.appendChild(content);
-	error.appendChild(div, error.firstChild);
+	error.insertBefore(div, error.firstChild);
 }
 
 export function moveErrors() {
