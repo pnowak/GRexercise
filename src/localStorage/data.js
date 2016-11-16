@@ -36,8 +36,10 @@ export function getDataFromLocal() {
     const stored = Array.from(form);
 
     for (let i = 0; i < stored.length; i += 1) {
-        if (data.hasOwnProperty(stored[i].name)) {
-            stored[i].value = localStorage.getItem(stored[i].name);
+        let item = stored[i];
+        
+        if (data.hasOwnProperty(item.name)) {
+            item.value = localStorage.getItem(item.name);
         }
     }
 }
