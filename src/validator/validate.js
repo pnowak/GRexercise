@@ -18,9 +18,9 @@ function validateForm() {
 		let value = item.value;
 		let name = item.name;
 		let regex = item.dataset.regex;
-		let msg = item.dataset.msg; console.log(value, name, regex, msg);
+		let msg = item.dataset.msg;
 
-		if (value === '' || !(new RegExp(regex).test(value))) {
+		if (!(new RegExp(regex).test(value))) {
 			errorCount += 1;
 			createError(`${name} ${msg}`);
 			moveErrors();

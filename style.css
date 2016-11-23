@@ -57,10 +57,6 @@ input[type="button"] {
     border-color: #555 transparent transparent transparent;
 }
 
-.show {
-    color: #d3d5d0;
-}
-
 .errors {
     position: fixed;
     bottom: 1%;
@@ -77,8 +73,27 @@ input[type="button"] {
     font-size: 0.55em;
 }
 
+.input_box {
+    position: relative;
+}
+
+.input_text_placeholder {
+    position: absolute;
+    padding-left: 10px;
+    font-size: 12px;
+    line-height: 14px;
+    color: #B3B3B3;
+    cursor: text;
+}
+
+.show {
+    visibility: visible;
+    color: #d3d5d0;
+}
+
 .disappear {
     display: none;
+    visibility: hidden;
 }
 
 .animate {

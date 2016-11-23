@@ -11,17 +11,41 @@
             <input type="radio" name="1_ticket" value=""> 1 TICKET €109
             <input type="radio" name="5_tickets" value=""> 5 TICKETS €495
 
-            <input type="text" name="first_name" value="" data-regex="[a-zA-Z]" data-msg="nie może być pusta i być liczbą" data-placeholder="">
-            <input type="text" name="last_name" value="" data-regex="[a-zA-Z]" data-msg="nie może być pusta i być liczbą" data-placeholder="">
+            <div class="input_box">
+                <label for="first_name" class="input_text_placeholder">First name</label>
+                <input type="text" name="first_name" value="" data-regex="^[^0-9]+$" data-msg="nie może być pusta i być liczbą">
+            </div>
+            <div class="input_box">
+                <label for="last_name" class="input_text_placeholder">Last name</label>
+                <input type="text" name="last_name" value="" data-regex="^[^0-9]+$" data-msg="nie może być pusta i być liczbą" data-placeholder="Last name">
+            </div>
 
-            <textarea name="textarea_1" data-max="10" data-regex="^.{1,10}$" data-msg="nie może być dłuższa niż 10 dowolnych znaków" data-placeholder=""></textarea>
-            <textarea name="textarea_2" data-max="20" data-regex="^.{1,20}$" data-msg="nie może być dłuższa niż 20 dowolnych znaków" data-placeholder=""></textarea>
+            <div class="input_box">
+                <label for="textarea_1" class="input_text_placeholder">Textarea 1</label>
+                <textarea name="textarea_1" data-max="10" data-regex="^.{1,10}$" data-msg="nie może być dłuższa niż 10 dowolnych znaków"></textarea>
+            </div>
+            <div class="input_box">
+                <label for="textarea_2" class="input_text_placeholder">Textarea 2</label>
+                <textarea name="textarea_2" data-max="20" data-regex="^.{1,20}$" data-msg="nie może być dłuższa niż 20 dowolnych znaków"></textarea>
+            </div>
 
-            <input type="text" name="email" value="" data-regex="((.*?)@(.*?).(org|com|pl))" data-msg="musi mieć poprawny format email" data-placeholder="">
-            <input type="password" name="password" value="" data-regex="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$@$!%*^?&])[A-Za-z\d$@$!%*^?&]{8,}" data-msg="musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny" data-placeholder="">
+            <div class="input_box">
+                <label for="email" class="input_text_placeholder">Email</label>
+                <input type="text" name="email" value="" data-regex="((.*?)@(.*?).(org|com|pl))" data-msg="musi mieć poprawny format email">
+            </div>
+            <div class="input_box">
+                <label for="password" class="input_text_placeholder">Password</label>
+                <input type="password" name="password" value="" data-regex="^(?=.{8,}$)(?=.*[A-Za-z])(?=.*[●!#$%&()*+,-./:;<=>?@[\]^_`{|}~])(?=.*[0-9]).*" data-msg="musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny">
+            </div>
 
-            <input type="text" name="vid_number" value="" data-max="5" data-regex="^[0-9]{1,5}$" data-msg="musi być liczbą max 5 cyfrową" data-placeholder="">
-            <input type="text" name="tickets_count" value="" data-regex="^([1-9]|1[0-9]|2[0])$" data-msg="musi zawierać liczby z zakresu 1-20" data-placeholder="">
+            <div class="input_box">
+                <label for="vid_number" class="input_text_placeholder">Vid number</label>
+                <input type="text" name="vid_number" value="" data-max="5" data-regex="^[0-9]{1,5}$" data-msg="musi być liczbą max 5 cyfrową">
+            </div>
+            <div class="input_box">
+                <label for="tickets_count" class="input_text_placeholder">Tickets count</label>
+                <input type="text" name="tickets_count" value="" data-regex="^([1-9]|1[0-9]|2[0])$" data-msg="musi zawierać liczby z zakresu 1-20">
+            </div>
 
             <input type="button" value="REGISTER" id="send">
         </form>

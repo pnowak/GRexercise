@@ -2,7 +2,6 @@
 
 import get from './../helpers/get';
 
-//Aktualna konfiguracja pól formularza
 export const dataFromForm = {
     first_name: '',
     last_name: '',

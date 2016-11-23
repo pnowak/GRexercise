@@ -5,7 +5,7 @@ import validateForm from './validator/validate';
 import likePlaceholder from './placeholder/likePlaceholder';
 import { createError, moveErrors, removeErrors } from './errors/error';
 import { addBalloon, removeBalloon } from './balloon/balloon';
-import * as data from './localStorage/data';
+import { saveData, dataFromForm, getDataFromLocal } from './localStorage/data';
 
 const send = get('send');
 const form = get('form');
@@ -14,7 +14,7 @@ form.addEventListener('input', function(e) {
 	const target = e.target;
 	const balloon = get('balloon');
 
-  	data.saveData(target, data.dataFromForm);
+  	saveData(target, dataFromForm);
 
   	if (target.value.length > target.dataset.max) {
   		addBalloon(target);
@@ -29,9 +29,10 @@ send.addEventListener('click', function(e) {
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(e) {
+	console.log(localStorage.first_name);
 	if (localStorage.first_name === '') {
 		likePlaceholder();
 	} else {
-		data.getDataFromLocal();
+		getDataFromLocal();
 	}
 }, false);

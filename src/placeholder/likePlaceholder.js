@@ -4,42 +4,44 @@ import get from './../helpers/get';
 
 function likePlaceholder() {
 	const form = get('form');
-	const stored = Array.from(form);
+	const arrayForm = Array.from(form);
+	const labels = form.getElementsByTagName('label'); console.log(arrayForm, labels);
 
-	stored.forEach(function (item, index) {
+	for (let i = 0; i < labels.length; i += 1) {
+		let item = labels[i];
+	}
+
+	arrayForm.forEach(function (item, index) {
 		if (item.type !== 'button') {
-			if (item.value === '') {
-				item.value  = item.name;
-				item.classList.add('show');
-
-				if (item.type === 'password') {
-					item.type = 'text';
-				}
-			}
-
-			item.addEventListener('keypress', function() {
-				if (item.value  === item.name) {
-					item.value  = '';
-					item.classList.remove('show');
-
-					if (item.name === 'password') {
-						item.type  = 'password';
-					}
-				}
+			
+			item.addEventListener('click', function(e) {
+				checkValue(item);
 			});
-
-			item.addEventListener('blur', function() {
-				if (item.value === '') {
-					item.value  = item.name;
-					item.classList.toggle('show');
-
-					if (item.type === 'password') {
-						item.type = 'text';
-					}
-				}
+            item.addEventListener('keydown', function(e) {
+				checkValue(item);
+			});
+            item.addEventListener('keypress', function(e) {
+				checkValue(item);
+			});
+            item.addEventListener('keyup', function(e) {
+				checkValue(item);
+			});
+            item.addEventListener('focus', function(e) {
+				checkValue(item);
+			});
+            item.addEventListener('blur', function(e) {
+				checkValue(item);
 			});
 		}
 	});
+}
+
+function checkValue(item) {
+	if (item.value === '') {
+		item.classList.add('show');
+    } else {
+        item.classList.add('disappear')
+    }
 }
 
 export default likePlaceholder;
