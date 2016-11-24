@@ -3,45 +3,39 @@
 import get from './../helpers/get';
 
 function likePlaceholder() {
-	const form = get('form');
-	const arrayForm = Array.from(form);
-	const labels = form.getElementsByTagName('label'); console.log(arrayForm, labels);
-
-	for (let i = 0; i < labels.length; i += 1) {
-		let item = labels[i];
-	}
-
-	arrayForm.forEach(function (item, index) {
-		if (item.type !== 'button') {
-			
-			item.addEventListener('click', function(e) {
-				checkValue(item);
-			});
-            item.addEventListener('keydown', function(e) {
-				checkValue(item);
-			});
-            item.addEventListener('keypress', function(e) {
-				checkValue(item);
-			});
-            item.addEventListener('keyup', function(e) {
-				checkValue(item);
-			});
-            item.addEventListener('focus', function(e) {
-				checkValue(item);
-			});
-            item.addEventListener('blur', function(e) {
-				checkValue(item);
-			});
-		}
-	});
-}
-
-function checkValue(item) {
-	if (item.value === '') {
-		item.classList.add('show');
-    } else {
-        item.classList.add('disappear')
+    const form = get('form');
+	const labels = form.getElementsByTagName('label');
+	const arrayLabels = Array.from(labels);
+    const arrayForm = Array.from(form);
+    
+    for (let i = 0; i < arrayForm.length; ++i) { 
+        (function (n) { 
+            var fn;
+            
+            for (let j = 0; j < arrayLabels.length; ++j) {
+                if (arrayLabels[j].htmlFor === arrayForm[i].name) {
+                    
+                    (function (label) { 
+                        fn = function () {
+                            if (this.value === '') {
+                                label.style.visibility = 'visible';
+                            } else {
+                                label.style.visibility = 'hidden';
+                            }
+                        };
+                    }(arrayLabels[j])); 
+                    n.addEventListener('click', fn);
+                    n.addEventListener('keydown', fn);
+                    n.addEventListener('keypress', fn);
+                    n.addEventListener('keyup', fn);
+                    n.addEventListener('focus', fn);
+                    n.addEventListener('focus', focus);
+                    n.addEventListener('blur', fn);
+                    n.addEventListener('blur', blur);
+                }
+            }
+        }(arrayForm[i]));
     }
-}
+};
 
 export default likePlaceholder;

@@ -6,7 +6,7 @@ body {
 }
 
 input, textarea {
-    padding: 10px 15px;
+    padding: 6px 6px;
     margin: 10px;
     color: #000000;
     background-color: #ffffff;
@@ -79,11 +79,23 @@ input[type="button"] {
 
 .input_text_placeholder {
     position: absolute;
-    padding-left: 10px;
-    font-size: 12px;
-    line-height: 14px;
+    padding-left: 16px;
+    font-size: 0.875em;  /* 14px / 16px */
+    line-height: 45px;
     color: #B3B3B3;
     cursor: text;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
 }
 
 .show {
