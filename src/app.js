@@ -29,8 +29,7 @@ send.addEventListener('click', function(e) {
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(e) {
-	console.log(localStorage.first_name);
-	if (localStorage.first_name === '') {
+	if (localStorage.getItem('first_name') === '') {
 		likePlaceholder();
 	} else {
 		getDataFromLocal();

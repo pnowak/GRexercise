@@ -50,141 +50,21 @@
 
 	var _get2 = _interopRequireDefault(_get);
 
-	var _likePlaceholder = __webpack_require__(2);
+	var _validate = __webpack_require__(2);
+
+	var _validate2 = _interopRequireDefault(_validate);
+
+	var _likePlaceholder = __webpack_require__(5);
 
 	var _likePlaceholder2 = _interopRequireDefault(_likePlaceholder);
 
 	var _error = __webpack_require__(3);
 
-	var _balloon = __webpack_require__(4);
+	var _balloon = __webpack_require__(6);
 
-	var _data = __webpack_require__(5);
+	var _data = __webpack_require__(4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var validator = {
-		types: {},
-		config: {},
-		errors: 0,
-		validate: function validate(data) {
-			var balloon = (0, _get2.default)('balloon'),
-			    i,
-			    type,
-			    checker,
-			    ok,
-			    msg;
-
-			for (i in data) {
-				if (data.hasOwnProperty(i)) {
-					type = this.config[i];
-					checker = this.types[type];
-
-					if (!checker) {
-						throw {
-							name: 'ValidateError',
-							message: 'Brak obsługi dla klucza ' + type
-						};
-					}
-
-					ok = checker.validate(data[i]);
-
-					if (!ok) {
-						this.errors += 1;
-						msg = i + ' ' + checker.message;
-						(0, _error.createError)(msg);
-						(0, _error.moveErrors)();
-					}
-				}
-			}
-
-			if (!this.hasErrors()) {
-				(0, _data.saveDataFromForm)(dataFromForm);
-
-				balloon.classList.add('balloon');
-				balloon.textContent = 'Wysłano! Dziękujemy.';
-			}
-		},
-		hasErrors: function hasErrors() {
-			return this.errors !== 0;
-		}
-	};
-
-	//Typy sprawdzeń
-	validator.types.max10 = {
-		validate: function validate(value) {
-			return (/^.{1,10}$/.test(value)
-			);
-		},
-		message: 'nie może być dłuższa niż 10 dowolnych znaków'
-	};
-
-	validator.types.max20 = {
-		validate: function validate(value) {
-			return (/^.{1,20}$/.test(value)
-			);
-		},
-		message: 'nie może być dłuższa niż 20 dowolnych znaków'
-	};
-
-	validator.types.noNumbers = {
-		validate: function validate(value) {
-			return value !== '' && !/[^a-zA-Z]+$/.test(value);
-		},
-		message: 'nie może być pusta i być liczbą'
-	};
-
-	validator.types.isMax5Digits = {
-		validate: function validate(value) {
-			return value !== '' && value.length <= 5 && !isNaN(value);
-		},
-		message: 'musi być liczbą max 5 cyfrową'
-	};
-
-	validator.types.isEmail = {
-		validate: function validate(value) {
-			// regex from http://emailregex.com/
-			return value !== '' && /((.*?)@(.*?).(org|com|pl))/i.test(value);
-		},
-		message: 'musi mieć poprawny format email'
-	};
-
-	validator.types.isPassword = {
-		validate: function validate(value) {
-			return value !== '' && value.length >= 8 && value.match(/([a-zA-Z])/) && value.match(/([0-9])/) && value.match(/.[!,@,#,$,%,^,&,*,?,_,~]/);
-		},
-		message: 'musi zawierać co najmniej 8 znaków, w tym co najmniej jedną liczbę, jedną literę i jeden znak specjalny'
-	};
-
-	validator.types.isRange = {
-		validate: function validate(value) {
-			return value !== '' && /^([1-9]|1[0-9]|2[0])$/i.test(value);
-		},
-		message: 'musi zawierać liczby z zakresu 1-20'
-	};
-
-	//Aktualna konfiguracja walidacji
-	validator.config = {
-		first_name: 'noNumbers',
-		last_name: 'noNumbers',
-		textarea_1: 'max10',
-		textarea_2: 'max20',
-		email: 'isEmail',
-		password: 'isPassword',
-		vid_number: 'isMax5Digits',
-		tickets_count: 'isRange'
-	};
-
-	//Aktualna konfiguracja pól formularza
-	var dataFromForm = {
-		first_name: '',
-		last_name: '',
-		textarea_1: '',
-		textarea_2: '',
-		email: '',
-		password: '',
-		vid_number: '',
-		tickets_count: ''
-	};
 
 	var send = (0, _get2.default)('send');
 	var form = (0, _get2.default)('form');
@@ -193,7 +73,7 @@
 		var target = e.target;
 		var balloon = (0, _get2.default)('balloon');
 
-		(0, _data.saveData)(target, dataFromForm);
+		(0, _data.saveData)(target, _data.dataFromForm);
 
 		if (target.value.length > target.dataset.max) {
 			(0, _balloon.addBalloon)(target);
@@ -202,11 +82,18 @@
 		}
 	}, false);
 
-	send.addEventListener('click', function validate(e) {
-		validator.validate(dataFromForm);
+	send.addEventListener('click', function (e) {
+		(0, _error.removeErrors)();
+		(0, _validate2.default)();
 	}, false);
 
-	document.addEventListener('DOMContentLoaded', _data.getDataFromLocal, false);
+	document.addEventListener('DOMContentLoaded', function (e) {
+		if (localStorage.getItem('first_name') === '') {
+			(0, _likePlaceholder2.default)();
+		} else {
+			(0, _data.getDataFromLocal)();
+		}
+	}, false);
 
 /***/ },
 /* 1 */
@@ -229,51 +116,52 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _get = __webpack_require__(1);
 
 	var _get2 = _interopRequireDefault(_get);
 
+	var _error = __webpack_require__(3);
+
+	var _data = __webpack_require__(4);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function likePlaceholder() {
-		var form = (0, _get2.default)('form');console.log(form);
-		var stored = Array.from(form);
+	function validateForm() {
+		var balloon = (0, _get2.default)('balloon');
+		var form = (0, _get2.default)('form');
+		var arrayForm = Array.from(form);
+		var errorCount = 0;
 
-		stored.forEach(function (item, index) {
-			if (item.type !== 'button') {
-				if (item.value === '') {
-					item.value = item.name;
-					item.classList.add('show');
+		var filterArray = arrayForm.filter(function (item) {
+			return item.dataset.regex;
+		});
 
-					if (item.type === 'password') {
-						item.type = 'text';
-					}
-				}
+		filterArray.forEach(function (item, index) {
+			var value = item.value;
+			var name = item.name;
+			var regex = item.dataset.regex;
+			var msg = item.dataset.msg;
 
-				item.addEventListener('keypress', function () {
-					if (item.value === item.name) {
-						item.value = '';
-						item.classList.remove('show');
-
-						if (item.name === 'password') {
-							item.type = 'password';
-						}
-					}
-				});
-
-				item.addEventListener('blur', function () {
-					if (item.value === '') {
-						item.value = item.name;
-						item.classList.toggle('show');
-
-						if (item.type === 'password') {
-							item.type = 'text';
-						}
-					}
-				});
+			if (!new RegExp(regex).test(value)) {
+				errorCount += 1;
+				(0, _error.createError)(name + ' ' + msg);
+				(0, _error.moveErrors)();
 			}
 		});
+
+		if (errorCount === 0) {
+			(0, _data.saveDataFromForm)();
+
+			balloon.classList.add('balloon');
+			balloon.textContent = 'Wysłano! Dziękujemy.';
+		}
 	}
+
+	exports.default = validateForm;
 
 /***/ },
 /* 3 */
@@ -286,6 +174,7 @@
 	});
 	exports.createError = createError;
 	exports.moveErrors = moveErrors;
+	exports.removeErrors = removeErrors;
 
 	var _get = __webpack_require__(1);
 
@@ -299,23 +188,148 @@
 		var content = document.createTextNode(value);
 
 		div.appendChild(content);
-		error.appendChild(div, error.firstChild);
+		error.insertBefore(div, error.firstChild);
 	}
 
 	function moveErrors() {
-		var error = (0, _get2.default)('error');
-		var divs = document.querySelectorAll('.errors div');
-		var i = divs.length;
+		var errorsDivs = document.querySelectorAll('.errors div');
+		var errorsArray = Array.from(errorsDivs);
 
-		while (i--) {
-			var item = divs[i];
-
+		errorsArray.forEach(function (item, index) {
 			item.classList.add('animate');
-		}
+		});
+	}
+
+	function removeErrors() {
+		var errorsDivs = document.querySelectorAll('.errors div');
+		var errorsArray = Array.from(errorsDivs);
+
+		errorsArray.forEach(function (item, index) {
+			item.classList.add('disappear');
+		});
 	}
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.dataFromForm = undefined;
+	exports.saveData = saveData;
+	exports.saveDataFromForm = saveDataFromForm;
+	exports.getDataFromLocal = getDataFromLocal;
+
+	var _get = __webpack_require__(1);
+
+	var _get2 = _interopRequireDefault(_get);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var dataFromForm = exports.dataFromForm = {
+	    first_name: '',
+	    last_name: '',
+	    textarea_1: '',
+	    textarea_2: '',
+	    email: '',
+	    password: '',
+	    vid_number: '',
+	    tickets_count: ''
+	};
+
+	function saveData(input, data) {
+	    data[input.name] = input.value;
+	}
+
+	function saveDataFromForm() {
+	    localStorage.data = JSON.stringify(dataFromForm);
+
+	    var data = JSON.parse(localStorage.data);
+
+	    for (var prop in data) {
+	        if (data.hasOwnProperty(prop)) {
+	            localStorage.setItem(prop, data[prop]);
+	        }
+	    }
+	}
+
+	function getDataFromLocal() {
+	    var data = JSON.parse(localStorage.data);
+	    var form = (0, _get2.default)('form');
+	    var stored = Array.from(form);
+
+	    for (var i = 0; i < stored.length; i += 1) {
+	        var item = stored[i];
+
+	        if (data.hasOwnProperty(item.name)) {
+	            item.value = localStorage.getItem(item.name);
+	        }
+	    }
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _get = __webpack_require__(1);
+
+	var _get2 = _interopRequireDefault(_get);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function likePlaceholder() {
+	    var form = (0, _get2.default)('form');
+	    var labels = form.getElementsByTagName('label');
+	    var arrayLabels = Array.from(labels);
+	    var arrayForm = Array.from(form);
+
+	    var _loop = function _loop(i) {
+	        (function (n) {
+	            var fn;
+
+	            for (var j = 0; j < arrayLabels.length; ++j) {
+	                if (arrayLabels[j].htmlFor === arrayForm[i].name) {
+
+	                    (function (label) {
+	                        fn = function fn() {
+	                            if (this.value === '') {
+	                                label.style.visibility = 'visible';
+	                            } else {
+	                                label.style.visibility = 'hidden';
+	                            }
+	                        };
+	                    })(arrayLabels[j]);
+	                    n.addEventListener('click', fn);
+	                    n.addEventListener('keydown', fn);
+	                    n.addEventListener('keypress', fn);
+	                    n.addEventListener('keyup', fn);
+	                    n.addEventListener('focus', fn);
+	                    n.addEventListener('focus', focus);
+	                    n.addEventListener('blur', fn);
+	                    n.addEventListener('blur', blur);
+	                }
+	            }
+	        })(arrayForm[i]);
+	    };
+
+	    for (var i = 0; i < arrayForm.length; ++i) {
+	        _loop(i);
+	    }
+	};
+
+	exports.default = likePlaceholder;
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -344,54 +358,6 @@
 
 		balloon.classList.remove('balloon');
 		balloon.textContent = '';
-	}
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.saveData = saveData;
-	exports.saveDataFromForm = saveDataFromForm;
-	exports.getDataFromLocal = getDataFromLocal;
-
-	var _get = __webpack_require__(1);
-
-	var _get2 = _interopRequireDefault(_get);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function saveData(input, data) {
-	    data[input.name] = input.value;
-	}
-
-	function saveDataFromForm(dataFromForm) {
-	    localStorage.data = JSON.stringify(dataFromForm);
-
-	    var data = JSON.parse(localStorage.data);
-
-	    for (var prop in data) {
-	        if (data.hasOwnProperty(prop)) {
-	            localStorage.setItem(prop, data[prop]);
-	        }
-	    }
-	}
-
-	function getDataFromLocal() {
-	    var data = JSON.parse(localStorage.data);
-	    var form = (0, _get2.default)('form');
-	    var stored = Array.from(form);
-
-	    for (var i = 0; i < stored.length; i += 1) {
-	        if (data.hasOwnProperty(stored[i].name)) {
-	            console.log(stored[i].name);
-	            stored[i].value = localStorage.getItem(stored[i].name);
-	        }
-	    }
 	}
 
 /***/ }
