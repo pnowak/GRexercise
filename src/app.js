@@ -16,6 +16,10 @@ form.addEventListener('input', function(e) {
 
   	saveData(target, dataFromForm);
 
+  	if (target.value.length === 0) {
+  		likePlaceholder();
+  	}
+
   	if (target.value.length > target.dataset.max) {
   		addBalloon(target);
   	} else {
@@ -29,9 +33,5 @@ send.addEventListener('click', function(e) {
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(e) {
-	if (localStorage.getItem('first_name') === '') {
-		likePlaceholder();
-	} else {
-		getDataFromLocal();
-	}
+	return localStorage.first_name !== void 0 ? getDataFromLocal() : likePlaceholder();
 }, false);
