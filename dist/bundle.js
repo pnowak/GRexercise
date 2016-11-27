@@ -90,7 +90,6 @@
 	}, false);
 
 	document.addEventListener('DOMContentLoaded', function (e) {
-	  console.log(localStorage.first_name !== '' && localStorage.getItem('first_name') !== null);
 	  localStorage.first_name !== '' && localStorage.getItem('first_name') !== null ? (0, _data.getDataFromLocal)() : (0, _likePlaceholder.allPlaceholders)();
 	}, false);
 
@@ -265,6 +264,7 @@
 
 	        if (data.hasOwnProperty(item.name)) {
 	            item.value = localStorage.getItem(item.name);
+	            saveData(item, dataFromForm);
 	        }
 	    }
 	}

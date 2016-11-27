@@ -39,6 +39,7 @@ export function getDataFromLocal() {
         
         if (data.hasOwnProperty(item.name)) {
             item.value = localStorage.getItem(item.name);
+            saveData(item, dataFromForm);
         }
     }
 }

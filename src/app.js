@@ -33,6 +33,5 @@ send.addEventListener('click', function(e) {
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(e) {
-    console.log((localStorage.first_name !== '') && (localStorage.getItem('first_name') !== null));
-	  ((localStorage.first_name !== '') && (localStorage.getItem('first_name') !== null))  ? getDataFromLocal() : allPlaceholders();
+	  ((localStorage.first_name !== '') && (localStorage.getItem('first_name') !== null)) ? getDataFromLocal() : allPlaceholders();
 }, false);
