@@ -2,30 +2,28 @@
 
 import get from './../helpers/get';
 
-function likePlaceholder() {
+export function allPlaceholders() {
     const form = get('form');
     const arrayForm = Array.from(form);
     const labels = form.getElementsByTagName('label');
-    const arrayLabels = Array.from(labels);
 
     for (let i = 0; i < arrayForm.length; i += 1) {
         (function (input) {
             var checkValue;
 
-            for (let j = 0; j < arrayLabels.length; j += 1) {
+            for (let j = 0; j < labels.length; j += 1) {
+                labels[j].classList.remove('disappear');
 
-                if (arrayLabels[j].htmlFor === arrayForm[i].name) {
-                    arrayLabels[j].classList.remove('disappear');
-
+                if (labels[j].htmlFor === arrayForm[i].name) {
                     (function (label) {
                         checkValue = function () {
                             if (this.value === '') {
-                                label.style.visibility = 'visible';
+                                label.classList.remove('disappear');
                             } else {
-                                label.style.visibility = 'hidden';
+                                label.classList.add('disappear');
                             }
                         };
-                    }(arrayLabels[j]));
+                    })(labels[j]);
 
                     input.addEventListener('click', checkValue);
                     input.addEventListener('keydown', checkValue);
@@ -35,8 +33,25 @@ function likePlaceholder() {
                     input.addEventListener('blur', checkValue);
                 }
             }
-        }(arrayForm[i]));
+        })(arrayForm[i]);
     }
 };
 
-export default likePlaceholder;
+export function onePlaceholder(target) {
+    const label = target.previousElementSibling;          
+        
+    target.addEventListener('click', checkValue);
+    target.addEventListener('keydown', checkValue);
+    target.addEventListener('keypress', checkValue);
+    target.addEventListener('keyup', checkValue);
+    target.addEventListener('focus', checkValue);
+    target.addEventListener('blur', checkValue);
+
+    function checkValue() {
+        if (this.value === '') {
+            label.classList.remove('disappear');
+        } else {
+            label.classList.add('disappear');
+        }
+    }
+};

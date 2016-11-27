@@ -56,8 +56,6 @@
 
 	var _likePlaceholder = __webpack_require__(5);
 
-	var _likePlaceholder2 = _interopRequireDefault(_likePlaceholder);
-
 	var _error = __webpack_require__(3);
 
 	var _balloon = __webpack_require__(6);
@@ -70,29 +68,30 @@
 	var form = (0, _get2.default)('form');
 
 	form.addEventListener('input', function (e) {
-		var target = e.target;
-		var balloon = (0, _get2.default)('balloon');
+	  var target = e.target;
+	  var balloon = (0, _get2.default)('balloon');
 
-		(0, _data.saveData)(target, _data.dataFromForm);
+	  (0, _data.saveData)(target, _data.dataFromForm);
 
-		if (target.value.length > target.dataset.max) {
-			(0, _balloon.addBalloon)(target);
-		} else {
-			(0, _balloon.removeBalloon)();
-		}
+	  if (target.value.length === 0) {
+	    (0, _likePlaceholder.onePlaceholder)(target);
+	  }
+
+	  if (target.value.length > target.dataset.max) {
+	    (0, _balloon.addBalloon)(target);
+	  } else {
+	    (0, _balloon.removeBalloon)();
+	  }
 	}, false);
 
 	send.addEventListener('click', function (e) {
-		(0, _error.removeErrors)();
-		(0, _validate2.default)();
+	  (0, _error.removeErrors)();
+	  (0, _validate2.default)();
 	}, false);
 
 	document.addEventListener('DOMContentLoaded', function (e) {
-		if (localStorage.getItem('first_name') === '') {
-			(0, _likePlaceholder2.default)();
-		} else {
-			(0, _data.getDataFromLocal)();
-		}
+	  console.log(localStorage.first_name !== '' && localStorage.getItem('first_name') !== null);
+	  localStorage.first_name !== '' && localStorage.getItem('first_name') !== null ? (0, _data.getDataFromLocal)() : (0, _likePlaceholder.allPlaceholders)();
 	}, false);
 
 /***/ },
@@ -279,6 +278,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.allPlaceholders = allPlaceholders;
+	exports.onePlaceholder = onePlaceholder;
 
 	var _get = __webpack_require__(1);
 
@@ -286,47 +287,63 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function likePlaceholder() {
+	function allPlaceholders() {
 	    var form = (0, _get2.default)('form');
-	    var labels = form.getElementsByTagName('label');
-	    var arrayLabels = Array.from(labels);
 	    var arrayForm = Array.from(form);
+	    var labels = form.getElementsByTagName('label');
 
 	    var _loop = function _loop(i) {
-	        (function (n) {
-	            var fn;
+	        (function (input) {
+	            var checkValue;
 
-	            for (var j = 0; j < arrayLabels.length; ++j) {
-	                if (arrayLabels[j].htmlFor === arrayForm[i].name) {
+	            for (var j = 0; j < labels.length; j += 1) {
+	                labels[j].classList.remove('disappear');
 
+	                if (labels[j].htmlFor === arrayForm[i].name) {
 	                    (function (label) {
-	                        fn = function fn() {
+	                        checkValue = function checkValue() {
 	                            if (this.value === '') {
-	                                label.style.visibility = 'visible';
+	                                label.classList.remove('disappear');
 	                            } else {
-	                                label.style.visibility = 'hidden';
+	                                label.classList.add('disappear');
 	                            }
 	                        };
-	                    })(arrayLabels[j]);
-	                    n.addEventListener('click', fn);
-	                    n.addEventListener('keydown', fn);
-	                    n.addEventListener('keypress', fn);
-	                    n.addEventListener('keyup', fn);
-	                    n.addEventListener('focus', fn);
-	                    n.addEventListener('focus', focus);
-	                    n.addEventListener('blur', fn);
-	                    n.addEventListener('blur', blur);
+	                    })(labels[j]);
+
+	                    input.addEventListener('click', checkValue);
+	                    input.addEventListener('keydown', checkValue);
+	                    input.addEventListener('keypress', checkValue);
+	                    input.addEventListener('keyup', checkValue);
+	                    input.addEventListener('focus', checkValue);
+	                    input.addEventListener('blur', checkValue);
 	                }
 	            }
 	        })(arrayForm[i]);
 	    };
 
-	    for (var i = 0; i < arrayForm.length; ++i) {
+	    for (var i = 0; i < arrayForm.length; i += 1) {
 	        _loop(i);
 	    }
 	};
 
-	exports.default = likePlaceholder;
+	function onePlaceholder(target) {
+	    var label = target.previousElementSibling;
+
+	    target.addEventListener('click', checkValue);
+	    target.addEventListener('keydown', checkValue);
+	    target.addEventListener('keypress', checkValue);
+	    target.addEventListener('keyup', checkValue);
+	    target.addEventListener('focus', checkValue);
+	    target.addEventListener('blur', checkValue);
+
+	    function checkValue() {
+	        if (this.value === '') {
+	            label.classList.remove('disappear');
+	        } else {
+	            label.classList.add('disappear');
+	        }
+	    }
+	};
 
 /***/ },
 /* 6 */

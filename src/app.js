@@ -2,7 +2,7 @@
 
 import get from './helpers/get';
 import validateForm from './validator/validate';
-import likePlaceholder from './placeholder/likePlaceholder';
+import { allPlaceholders, onePlaceholder } from './placeholder/likePlaceholder';
 import { createError, moveErrors, removeErrors } from './errors/error';
 import { addBalloon, removeBalloon } from './balloon/balloon';
 import { saveData, dataFromForm, getDataFromLocal } from './localStorage/data';
@@ -11,27 +11,28 @@ const send = get('send');
 const form = get('form');
 
 form.addEventListener('input', function(e) {
-	const target = e.target;
-	const balloon = get('balloon');
+	  const target = e.target;
+	  const balloon = get('balloon');
 
-  	saveData(target, dataFromForm);
+    saveData(target, dataFromForm);
 
   	if (target.value.length === 0) {
-  		likePlaceholder();
+  		  onePlaceholder(target);
   	}
 
   	if (target.value.length > target.dataset.max) {
-  		addBalloon(target);
+  		  addBalloon(target);
   	} else {
-  		removeBalloon();
+  		  removeBalloon();
   	}
 }, false);
 
 send.addEventListener('click', function(e) {
-	removeErrors();
-	validateForm();
+	  removeErrors();
+	  validateForm();
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(e) {
-	return localStorage.first_name !== void 0 ? getDataFromLocal() : likePlaceholder();
+    console.log((localStorage.first_name !== '') && (localStorage.getItem('first_name') !== null));
+	  ((localStorage.first_name !== '') && (localStorage.getItem('first_name') !== null))  ? getDataFromLocal() : allPlaceholders();
 }, false);
